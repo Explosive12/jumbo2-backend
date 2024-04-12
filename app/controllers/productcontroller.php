@@ -17,6 +17,10 @@ class ProductController extends Controller
 
     public function getAll()
     {
+        if (!$this->checkForJwt()) {
+            $this->respondWithError(401, "Unauthorized");
+            return;
+        }
         $offset = NULL;
         $limit = NULL;
 

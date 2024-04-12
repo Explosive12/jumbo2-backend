@@ -29,6 +29,9 @@ $router->delete('/categories/(\d+)', 'CategoryController@delete');
 
 // routes for the users endpoint
 $router->post('/users/login', 'UserController@login');
+$router->post('/users/register', 'UserController@register');
+$router->post('/users/logout', 'UserController@logout');
+$router->get('/users/verify', 'UserController@verify');
 
 // Run it!
 $router->run();
