@@ -126,7 +126,7 @@ class UserRepository extends Repository
         }
     }
 
-    function update($user, $id)
+    function update($user)
     {
         try {
             $stmt = $this->connection->prepare("UPDATE user SET username = :username, password = :password, email = :email, role = :role WHERE id = :id");
@@ -134,7 +134,7 @@ class UserRepository extends Repository
             $stmt->bindParam(':password', $user->password);
             $stmt->bindParam(':email', $user->email);
             $stmt->bindParam(':role', $user->role, PDO::PARAM_INT);
-            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':id', $user->id);
             $stmt->execute();
 
             return $user;
