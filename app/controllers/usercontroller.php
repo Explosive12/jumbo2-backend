@@ -16,6 +16,7 @@ class UserController extends Controller
         $this->service = new UserService();
     }
 
+    // checks if the jwt is still valid, if true refreshes the jwt
     public function verify()
     {
         $decoded = $this->checkForJwt();
@@ -30,6 +31,8 @@ class UserController extends Controller
             return;
         }
         $user->role = $decoded->role;
+        $_SESSION["user"] = $user;
+
 
         $this->respond(["valid" => true, "jwt" => $this->createJwt($user), "user" => $user]);
     }
@@ -47,6 +50,8 @@ class UserController extends Controller
         $userData->password = $this->service->hashPassword($userData->password);
         $userData->role = UserRole::User->value;
         $user = $this->service->insert($userData);
+        $_SESSION["user"] = $user;
+
         $jwt = $this->createJwt($user);
 
         $this->respond(["jwt" => $jwt, "user" => $user]);
@@ -66,6 +71,7 @@ class UserController extends Controller
             $this->respondWithError(401, "Incorrect username and/or password");
             return;
         }
+        $_SESSION["user"] = $user;
         $jwt = $this->createJwt($user);
         $this->respond(["jwt" => $jwt, "user" => $user]);
     }

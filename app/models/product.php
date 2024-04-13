@@ -1,8 +1,8 @@
 <?php
 namespace Models;
 
-class Product {
-
+class Product
+{
     public int $id;
     public string $name;
     public string $price;
@@ -10,7 +10,4 @@ class Product {
     public string $image;
     public string $category_id;
     public Category $category;
- 
 }
-
-?>

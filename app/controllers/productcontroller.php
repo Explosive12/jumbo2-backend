@@ -49,6 +49,28 @@ class ProductController extends Controller
         $this->respond($product);
     }
 
+    public function addToCart($id)
+    {
+        $product = $this->service->getOne($id);
+
+        if (!$product) {
+            $this->respondWithError(404, "Product not found");
+            return;
+        }
+
+        $cart = $this->checkForJwt()->cart;
+        $cart[] = $product;
+        $_SESSION['cart'] = $cart;
+        $this->respond($cart);
+    }
+
+    public function getByCategory($id)
+    {
+        $products = $this->service->getByCategory($id);
+
+        $this->respond($products);
+    }
+
     public function create()
     {
         try {

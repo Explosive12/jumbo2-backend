@@ -5,7 +5,7 @@ class Order
 {
     public int $id;
     public int $userid;
-    public string $status;
+    public int $status;
     public string $date;
     public float $total;
 }
