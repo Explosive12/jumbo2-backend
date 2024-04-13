@@ -13,6 +13,16 @@ class UserService
         $this->repository = new UserRepository();
     }
 
+    public function getAll($offset = NULL, $limit = NULL)
+    {
+        return $this->repository->getAll($offset, $limit);
+    }
+
+    public function getOne($id)
+    {
+        return $this->repository->getOne($id);
+    }
+
     public function getByUsernameOrEmail($username, $email)
     {
         return $this->repository->getByUsernameOrEmail($username, $email);
@@ -21,6 +31,11 @@ class UserService
     public function insert($user)
     {
         return $this->repository->insert($user);
+    }
+
+    public function update($user)
+    {
+        return $this->repository->update($user);
     }
 
     public function hashPassword($password)
@@ -32,6 +47,8 @@ class UserService
     {
         return $this->repository->checkUsernamePassword($username, $password);
     }
+
+
 }
 
 ?>

@@ -34,8 +34,13 @@ $router->post('/users/register', 'UserController@register');
 $router->post('/users/logout', 'UserController@logout');
 $router->get('/users/verify', 'UserController@verify');
 
-// routes for the cart endpoint
+// routes for the cart & onder endpoint
 $router->post('/cart/order', 'CartController@payment');
+
+// routes for the admnin endpoint
+$router->get('/admin/users', 'AdminController@getAllUsers');
+$router->put('/admin/users/(\d+)', 'AdminController@updateUser');
+
 
 // Run it!
 $router->run();
