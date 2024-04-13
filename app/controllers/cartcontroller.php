@@ -4,68 +4,52 @@ namespace Controllers;
 
 use Models\Order;
 use Models\Orderitem;
+use Models\OrderStatus;
 use Services\OrderService;
+use Services\ProductService;
+use Services\UserService;
 
 
 class CartController extends Controller
 {
 
+    private $productService;
+    private $orderService;
+    private $userService;
+
+    function __construct()
+    {
+        $this->productService = new ProductService();
+        $this->orderService = new OrderService();
+        $this->userService = new UserService();
+    }
     public function payment()
     {
-        $order = new Order();
-        $order->userid = $_SESSION['user']->id;
-        $order->status = 0;
-        $order->date = date('Y-m-d H:i:s');
-        $order->total = 0;
-
-        $orderService = new OrderService();
-        $orderid = $orderService->create($order);
-
-        $cart = $_SESSION['cart'] ?? [];
-        foreach ($cart as $productid => $quantity) {
-            $orderitem = new Orderitem();
-            $orderitem->orderid = $orderid;
-            $orderitem->productid = $productid;
-            $orderitem->quantity = $quantity;
-            $orderitem->price = 0;
-
-            $orderService->addOrderitem($orderitem);
+        if (!$this->checkForJwt()) {
+            $this->respondWithError(401, "Unauthorized");
+            return;
         }
 
-        unset($_SESSION['cart']);
+        $postedData = json_decode(file_get_contents('php://input'), true);
+        $items = $postedData['products'];
+        $total = (float) $postedData['total'];
 
-        header('Location: /cart');
+        $order = new Order();
+        $order->status = OrderStatus::Fulfilled->value;
+        $username = $this->getUsernameFromJwt();
+        $user = $this->userService->getByUsernameOrEmail($username, null);
+        $order->userid = $user->id;
+        $order->date = date("Y-m-d H:i:s");
+        $order->total = $total;
+        $order->id = $this->orderService->insert($order);
 
+        foreach ($items as $item) {
+            $product = $this->productService->getOne($item['product']['id']);
+            $quantity = $item['quantity'];
+            $orderitem = new Orderitem(0, $order->id, $product->id, $quantity, $product->price);
+            $orderitem->id = $this->orderService->insertOrderItem($orderitem);
+        }
+
+        $this->respond($order);
     }
-
-    public function add()
-    {
-        $productid = $_POST['productid'];
-        $quantity = $_POST['quantity'];
-
-        $cart = $_SESSION['cart'] ?? [];
-        $cart[$productid] = $quantity;
-        $_SESSION['cart'] = $cart;
-
-        header('Location: /cart');
-    }
-
-    public function remove()
-    {
-        $productid = $_POST['productid'];
-
-        $cart = $_SESSION['cart'] ?? [];
-        unset($cart[$productid]);
-        $_SESSION['cart'] = $cart;
-
-        header('Location: /cart');
-    }
-
-    public function clear()
-    {
-        unset($_SESSION['cart']);
-
-        header('Location: /cart');
-    }
-
 }

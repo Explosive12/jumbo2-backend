@@ -38,6 +38,12 @@ class Controller
         }
     }
 
+    function getUsernameFromJwt()
+    {
+        $decoded = $this->checkForJwt();
+        return $decoded->sub;
+    }
+
     function respond($data)
     {
         $this->respondWithCode(200, $data);

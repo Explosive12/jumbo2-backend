@@ -1,4 +1,5 @@
 <?php
+session_start();
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
@@ -32,6 +33,9 @@ $router->post('/users/login', 'UserController@login');
 $router->post('/users/register', 'UserController@register');
 $router->post('/users/logout', 'UserController@logout');
 $router->get('/users/verify', 'UserController@verify');
+
+// routes for the cart endpoint
+$router->post('/cart/order', 'CartController@payment');
 
 // Run it!
 $router->run();

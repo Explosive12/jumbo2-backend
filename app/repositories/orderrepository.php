@@ -8,7 +8,7 @@ class OrderRepository extends Repository
     public function getAll($offset = NULL, $limit = NULL)
     {
         try {
-            $query = "SELECT * FROM orders";
+            $query = "SELECT * FROM order";
             if ($offset != NULL && $limit != NULL) {
                 $query .= " LIMIT :offset, :limit";
             }
@@ -28,7 +28,7 @@ class OrderRepository extends Repository
     public function getOne($id)
     {
         try {
-            $query = "SELECT * FROM orders WHERE id = :id";
+            $query = "SELECT * FROM order WHERE id = :id";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
@@ -43,11 +43,11 @@ class OrderRepository extends Repository
     public function startOrder($order)
     {
         try {
-            $query = "INSERT INTO orders (user_id, status, total_price) VALUES (:user_id, :status, :total_price)";
+            $query = "INSERT INTO `order` (userid, status, total) VALUES (:userid, :status, :total)";
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':user_id', $order->user_id);
+            $stmt->bindParam(':userid', $order->userid);
             $stmt->bindParam(':status', $order->status);
-            $stmt->bindParam(':total_price', $order->total_price);
+            $stmt->bindParam(':total', $order->total);
             $stmt->execute();
             return $this->connection->lastInsertId();
         } catch (\PDOException $e) {

@@ -81,6 +81,7 @@ class ProductRepository extends Repository
         $product->id = $row['id'];
         $product->name = $row['name'];
         $product->price = $row['price'];
+        $product->stock = $row['stock'];
         $product->description = $row['description'];
         $product->image = $row['image'];
         $product->category_id = $row['category_id'];
@@ -95,9 +96,9 @@ class ProductRepository extends Repository
     function insert($product)
     {
         try {
-            $stmt = $this->connection->prepare("INSERT into product (name, price, description, image, category_id) VALUES (?,?,?,?,?)");
+            $stmt = $this->connection->prepare("INSERT into product (name, price, description, image, category_id, stock) VALUES (?,?,?,?,?,?)");
 
-            $stmt->execute([$product->name, $product->price, $product->description, $product->image, $product->category_id]);
+            $stmt->execute([$product->name, $product->price, $product->description, $product->image, $product->category_id, $product->stock]);
 
             $product->id = $this->connection->lastInsertId();
 
@@ -111,9 +112,9 @@ class ProductRepository extends Repository
     function update($product, $id)
     {
         try {
-            $stmt = $this->connection->prepare("UPDATE product SET name = ?, price = ?, description = ?, image = ?, category_id = ? WHERE id = ?");
+            $stmt = $this->connection->prepare("UPDATE product SET name = ?, price = ?, description = ?, image = ?, category_id = ?, stock = ? WHERE id = ?");
 
-            $stmt->execute([$product->name, $product->price, $product->description, $product->image, $product->category_id, $id]);
+            $stmt->execute([$product->name, $product->price, $product->description, $product->image, $product->category_id, $product->stock, $id]);
 
             return $this->getOne($product->id);
         } catch (PDOException $e) {

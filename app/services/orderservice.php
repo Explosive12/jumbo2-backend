@@ -14,7 +14,7 @@ class OrderService
 
     function __construct()
     {
-        $this->repository = new OrderRepository();
+        $this->orderrepository = new OrderRepository();
         $this->orderitemrepository = new OrderItemRepository();
     }
 
@@ -31,7 +31,12 @@ class OrderService
 
     public function insert($order)
     {
-        return $this->orderrepository->insert($order);
+        return $this->orderrepository->startOrder($order);
+    }
+
+    public function updateStatus($id, $status)
+    {
+        return $this->orderrepository->updateStatus($id, $status);
     }
 
     // All OrderItem thingss

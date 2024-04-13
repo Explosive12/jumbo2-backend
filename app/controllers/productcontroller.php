@@ -9,7 +9,6 @@ class ProductController extends Controller
 {
     private $service;
 
-    // initialize services
     function __construct()
     {
         $this->service = new ProductService();
@@ -40,28 +39,12 @@ class ProductController extends Controller
     {
         $product = $this->service->getOne($id);
 
-        // we might need some kind of error checking that returns a 404 if the product is not found in the DB
         if (!$product) {
             $this->respondWithError(404, "Product not found");
             return;
         }
 
         $this->respond($product);
-    }
-
-    public function addToCart($id)
-    {
-        $product = $this->service->getOne($id);
-
-        if (!$product) {
-            $this->respondWithError(404, "Product not found");
-            return;
-        }
-
-        $cart = $this->checkForJwt()->cart;
-        $cart[] = $product;
-        $_SESSION['cart'] = $cart;
-        $this->respond($cart);
     }
 
     public function getByCategory($id)

@@ -28,14 +28,14 @@ class ProductService
         return $this->repository->getOne($id);
     }
 
-    public function insert($item)
+    public function insert($product)
     {
-        return $this->repository->insert($item);
+        return $this->repository->insert($product);
     }
 
-    public function update($item, $id)
+    public function update($product, $id)
     {
-        return $this->repository->update($item, $id);
+        return $this->repository->update($product, $id);
     }
 
     public function delete($item)

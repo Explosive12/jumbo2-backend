@@ -1,6 +1,7 @@
 <?php
+namespace Models;
 
-enum Orderstatus: int
+enum OrderStatus: int
 {
     case Pending = 1;
     case Fulfilled = 2;
