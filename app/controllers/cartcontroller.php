@@ -23,6 +23,7 @@ class CartController extends Controller
         $this->orderService = new OrderService();
         $this->userService = new UserService();
     }
+
     public function payment()
     {
         if (!$this->checkForJwt()) {
@@ -32,7 +33,7 @@ class CartController extends Controller
 
         $postedData = json_decode(file_get_contents('php://input'), true);
         $items = $postedData['products'];
-        $total = (float) $postedData['total'];
+        $total = $this->formatTotal($postedData['total']);
 
         $order = new Order();
         $order->status = OrderStatus::Fulfilled->value;
@@ -51,5 +52,12 @@ class CartController extends Controller
         }
 
         $this->respond($order);
+    }
+    private function formatTotal($total)
+    {
+        $total = str_replace('€', '', $total);
+        $total = trim($total);
+        $total = (float) number_format((float) $total, 2, '.', '');
+        return $total;
     }
 }
