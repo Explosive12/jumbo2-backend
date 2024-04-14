@@ -86,7 +86,7 @@ class UserController extends Controller
             "role" => $user->role,
             "iat" => time(),
             "nbf" => time(),
-            "exp" => time() + 3600,
+            "exp" => time() + 60 * 60 * 24 * 30,
         );
 
         $jwt = JWT::encode($payload, $key, 'HS256');

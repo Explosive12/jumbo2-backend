@@ -13,9 +13,9 @@ class UserService
         $this->repository = new UserRepository();
     }
 
-    public function getAll($offset = NULL, $limit = NULL)
+    public function getAll($currentUserId, $offset = NULL, $limit = NULL, )
     {
-        return $this->repository->getAll($offset, $limit);
+        return $this->repository->getAll($currentUserId, $offset, $limit);
     }
 
     public function getOne($id)

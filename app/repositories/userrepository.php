@@ -10,14 +10,15 @@ use Repositories\Repository;
 class UserRepository extends Repository
 {
 
-    function getAll($offset = NULL, $limit = NULL)
+    function getAll($currentUserId, $offset = NULL, $limit = NULL, )
     {
         try {
-            $query = "SELECT * FROM user";
+            $query = "SELECT * FROM user WHERE id != :currentUserId";
             if (isset($limit) && isset($offset)) {
                 $query .= " LIMIT :limit OFFSET :offset ";
             }
             $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':currentUserId', $currentUserId, PDO::PARAM_INT);
             if (isset($limit) && isset($offset)) {
                 $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
                 $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);

@@ -19,7 +19,6 @@ class AdminController extends Controller
     public function getAllUsers()
     {
         if (!$this->checkForJwt()) {
-            $this->respondWithError(401, "Unauthorized");
             return;
         }
         $offset = NULL;
@@ -32,8 +31,11 @@ class AdminController extends Controller
             $limit = $_GET["limit"];
         }
 
+        $username = $this->getUsernameFromJwt();
 
-        $users = $this->service->getAll($offset, $limit);
+        $currentUserId = $this->service->getByUsernameOrEmail($username, $username)->id;
+
+        $users = $this->service->getAll($currentUserId, $offset, $limit, );
 
         $this->respond($users);
     }
