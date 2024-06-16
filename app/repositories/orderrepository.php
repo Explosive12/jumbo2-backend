@@ -68,4 +68,24 @@ class OrderRepository extends Repository
         }
     }
 
+    public function getAllOrders(mixed $offset, mixed $limit)
+    {
+        try {
+            $query = "SELECT id, userid, status, total, order_date as date FROM `order`";
+            if ($offset != NULL && $limit != NULL) {
+                $query .= " LIMIT :offset, :limit";
+            }
+            $stmt = $this->connection->prepare($query);
+            if ($offset != NULL && $limit != NULL) {
+                $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
+                $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
+            }
+            $stmt->execute();
+            $stmt->setFetchMode(\PDO::FETCH_CLASS, 'Models\Order');
+            return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
 }

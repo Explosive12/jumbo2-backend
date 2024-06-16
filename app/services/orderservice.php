@@ -29,24 +29,20 @@ class OrderService
         return $this->orderrepository->getOne($id);
     }
 
+    public function getAllOrders($currentUserId, $offset = NULL, $limit = NULL, )
+    {
+        return $this->orderrepository->getAllOrders($currentUserId, $offset, $limit);
+    }
+
     public function insert($order)
     {
         return $this->orderrepository->startOrder($order);
-    }
-
-    public function updateStatus($id, $status)
-    {
-        return $this->orderrepository->updateStatus($id, $status);
-    }
-
-    // All OrderItem thingss
-    public function getAllOrderItems($offset = NULL, $limit = NULL)
-    {
-        return $this->orderitemrepository->getAll($offset, $limit);
     }
 
     public function insertOrderItem($orderItem)
     {
         return $this->orderitemrepository->insert($orderItem);
     }
+
+
 }

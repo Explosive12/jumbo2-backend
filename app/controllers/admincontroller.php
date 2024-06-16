@@ -4,16 +4,41 @@ namespace Controllers;
 
 use Models\Userrole;
 use Models\User;
+use Services\OrderService;
 use Services\UserService;
 
 class AdminController extends Controller
 {
 
-    private $service;
+    private $userService;
+    private $orderService;
 
     function __construct()
     {
-        $this->service = new UserService();
+        $this->userService = new UserService();
+        $this->orderService = new OrderService();
+    }
+
+    public function getAllOrders(): void
+    {
+        if(!$this->userIsAdmin()) {
+            $this->respondWithError(401, "Unauthorized");
+            return;
+        }
+
+        $offset = NULL;
+        $limit = NULL;
+
+        if (isset($_GET["offset"]) && is_numeric($_GET["offset"])) {
+            $offset = $_GET["offset"];
+        }
+        if (isset($_GET["limit"]) && is_numeric($_GET["limit"])) {
+            $limit = $_GET["limit"];
+        }
+
+        $orders = $this->orderService->getAllOrders($offset, $limit);
+
+        $this->respond($orders);
     }
 
     public function getAllUsers(): void
@@ -36,9 +61,9 @@ class AdminController extends Controller
 
         $username = $this->getUsernameFromJwt();
 
-        $currentUserId = $this->service->getByUsernameOrEmail($username, $username)->id;
+        $currentUserId = $this->userService->getByUsernameOrEmail($username, $username)->id;
 
-        $users = $this->service->getAll($currentUserId, $offset, $limit, );
+        $users = $this->userService->getAll($currentUserId, $offset, $limit, );
 
         $this->respond($users);
     }

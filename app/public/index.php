@@ -32,7 +32,6 @@ $router->delete('/categories/(\d+)', 'CategoryController@delete');
 $router->post('/users/login', 'UserController@login');
 $router->post('/users', 'UserController@register');
 $router->post('/users/logout', 'UserController@logout');
-$router->get('/users/verify', 'UserController@verify');
 
 // routes for the cart & order endpoint
 $router->post('/cart/order', 'CartController@payment');
@@ -40,6 +39,7 @@ $router->post('/cart/order', 'CartController@payment');
 // routes for the admin endpoint
 $router->get('/admin/users', 'AdminController@getAllUsers');
 $router->put('/admin/users/(\d+)', 'AdminController@updateUser');
+$router->get('/admin/orders', 'AdminController@getAllOrders');
 
 
 // Run it!
