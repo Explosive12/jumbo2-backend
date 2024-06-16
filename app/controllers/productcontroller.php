@@ -14,7 +14,7 @@ class ProductController extends Controller
         $this->service = new ProductService();
     }
 
-    public function getAll()
+    public function getAll(): void
     {
 
         $offset = NULL;
@@ -32,7 +32,14 @@ class ProductController extends Controller
         $this->respond($products);
     }
 
-    public function getOne($id)
+    public function getByCategory($id): void
+    {
+        $products = $this->service->getByCategory($id);
+
+        $this->respond($products);
+    }
+
+    public function getOne($id): void
     {
         $product = $this->service->getOne($id);
 
@@ -44,15 +51,13 @@ class ProductController extends Controller
         $this->respond($product);
     }
 
-    public function getByCategory($id)
-    {
-        $products = $this->service->getByCategory($id);
-
-        $this->respond($products);
-    }
-
     public function create()
     {
+        if(!$this->userIsAdmin()) {
+            $this->respondWithError(401, "Unauthorized");
+            return;
+        }
+
         try {
             $product = $this->createObjectFromPostedJson("Models\\Product");
             $product = $this->service->insert($product);
@@ -66,6 +71,11 @@ class ProductController extends Controller
 
     public function update($id)
     {
+        if (!$this->userIsAdmin()) {
+            $this->respondWithError(401, "Unauthorized");
+            return;
+        }
+
         try {
             $product = $this->createObjectFromPostedJson("Models\\Product");
             $product = $this->service->update($product, $id);
@@ -79,6 +89,10 @@ class ProductController extends Controller
 
     public function delete($id)
     {
+        if(!$this->userIsAdmin()) {
+            $this->respondWithError(401, "Unauthorized");
+            return;
+        }
         try {
             $this->service->delete($id);
         } catch (Exception $e) {

@@ -64,7 +64,7 @@ class UserRepository extends Repository
     {
         try {
             // retrieve the user with the given username
-            $stmt = $this->connection->prepare("SELECT id, username, password, role FROM user WHERE username = :username");
+            $stmt = $this->connection->prepare("SELECT id, username, password, email, role FROM user WHERE username = :username");
             $stmt->bindParam(':username', $username);
             $stmt->execute();
 
@@ -147,5 +147,18 @@ class UserRepository extends Repository
     function verifyPassword($input, $hash)
     {
         return password_verify($input, $hash);
+    }
+
+    public function getEmailByUsername($username)
+    {
+        try {
+            $stmt = $this->connection->prepare("SELECT email FROM user WHERE username = :username");
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
+
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            echo $e;
+        }
     }
 }

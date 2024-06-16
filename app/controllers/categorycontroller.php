@@ -36,7 +36,6 @@ class CategoryController extends Controller
     {
         $category = $this->service->getOne($id);
 
-        // we might need some kind of error checking that returns a 404 if the product is not found in the DB
         if (!$category) {
             $this->respondWithError(404, "Category not found");
             return;
@@ -47,6 +46,11 @@ class CategoryController extends Controller
 
     public function create()
     {
+        if (!$this->userIsAdmin()) {
+            $this->respondWithError(401, "Unauthorized");
+            return;
+        }
+
         try {
             $category = $this->createObjectFromPostedJson("Models\\Category");
             $this->service->insert($category);
@@ -59,6 +63,11 @@ class CategoryController extends Controller
 
     public function update($id)
     {
+        if (!$this->userIsAdmin()) {
+            $this->respondWithError(401, "Unauthorized");
+            return;
+        }
+
         try {
             $category = $this->createObjectFromPostedJson("Models\\Category");
             $this->service->update($category, $id);
@@ -71,6 +80,11 @@ class CategoryController extends Controller
 
     public function delete($id)
     {
+        if (!$this->userIsAdmin()) {
+            $this->respondWithError(401, "Unauthorized");
+            return;
+        }
+
         try {
             $this->service->delete($id);
         } catch (Exception $e) {

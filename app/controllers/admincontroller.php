@@ -18,9 +18,12 @@ class AdminController extends Controller
 
     public function getAllUsers()
     {
-        if (!$this->checkForJwt()) {
+
+        if(!$this->userIsAdmin()) {
+            $this->respondWithError(401, "Unauthorized");
             return;
         }
+
         $offset = NULL;
         $limit = NULL;
 
@@ -42,7 +45,7 @@ class AdminController extends Controller
 
     public function updateUser($id)
     {
-        if (!$this->checkForJwt()) {
+        if(!$this->userIsAdmin()) {
             $this->respondWithError(401, "Unauthorized");
             return;
         }

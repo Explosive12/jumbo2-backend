@@ -48,6 +48,11 @@ class UserService
         return $this->repository->checkUsernamePassword($username, $password);
     }
 
+    public function getEmailByUsername($username)
+    {
+        return $this->repository->getEmailByUsername($username);
+    }
+
 
 }
 

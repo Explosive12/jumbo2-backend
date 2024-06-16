@@ -1,3 +1,7 @@
+```bash
+Docker compose up
+```
+
 Login:
 
 # admin 

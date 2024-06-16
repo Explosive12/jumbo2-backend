@@ -30,14 +30,14 @@ $router->delete('/categories/(\d+)', 'CategoryController@delete');
 
 // routes for the users endpoint
 $router->post('/users/login', 'UserController@login');
-$router->post('/users/register', 'UserController@register');
+$router->post('/users', 'UserController@register');
 $router->post('/users/logout', 'UserController@logout');
 $router->get('/users/verify', 'UserController@verify');
 
-// routes for the cart & onder endpoint
+// routes for the cart & order endpoint
 $router->post('/cart/order', 'CartController@payment');
 
-// routes for the admnin endpoint
+// routes for the admin endpoint
 $router->get('/admin/users', 'AdminController@getAllUsers');
 $router->put('/admin/users/(\d+)', 'AdminController@updateUser');
 
