@@ -16,26 +16,6 @@ class UserController extends Controller
         $this->service = new UserService();
     }
 
-    // checks if the jwt is still valid, if true refreshes the jwt
-    public function verify()
-    {
-        $decoded = $this->checkForJwt();
-        if (!$decoded) {
-            $this->respond(["valid" => false]);
-            return;
-        }
-
-        $user = $this->service->getByUsernameOrEmail($decoded->sub, null);
-        if (!$user) {
-            $this->respondWithError(404, "User not found");
-            return;
-        }
-        $user->role = $decoded->role;
-        $_SESSION["user"] = $user;
-
-        $this->respond(["valid" => true, "jwt" => $this->generateToken($user), "user" => $user]);
-    }
-
     public function register()
     {
         $userData = $this->createObjectFromPostedJson('Models\\User');

@@ -16,7 +16,7 @@ class AdminController extends Controller
         $this->service = new UserService();
     }
 
-    public function getAllUsers()
+    public function getAllUsers(): void
     {
 
         if(!$this->userIsAdmin()) {
@@ -43,7 +43,7 @@ class AdminController extends Controller
         $this->respond($users);
     }
 
-    public function updateUser($id)
+    /**public function updateUser($id): void
     {
         if(!$this->userIsAdmin()) {
             $this->respondWithError(401, "Unauthorized");
@@ -66,6 +66,5 @@ class AdminController extends Controller
         $this->service->update($user);
 
         $this->respond($user);
-    }
-
+    }**/
 }

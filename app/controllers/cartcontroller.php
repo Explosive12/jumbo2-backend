@@ -24,7 +24,7 @@ class CartController extends Controller
         $this->userService = new UserService();
     }
 
-    public function payment()
+    public function payment(): void
     {
         if (!$this->checkForJwt()) {
             $this->respondWithError(401, "Unauthorized");
@@ -53,7 +53,7 @@ class CartController extends Controller
 
         $this->respond($order);
     }
-    private function formatTotal($total)
+    private function formatTotal($total): float
     {
         $total = str_replace('€', '', $total);
         $total = trim($total);
